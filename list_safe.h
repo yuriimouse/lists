@@ -21,7 +21,7 @@ typedef struct list_safe
     record_safe_t *last;
 } list_safe_t;
 
-list_safe_t *list_safe_construct();
+list_safe_t *list_safe_construct(void);
 void list_safe_init(list_safe_t *list);
 void list_safe_clear(list_safe_t *list, void (*destructor)(void *));
 list_t *lists_safe_destruct(list_safe_t *list, void (*destructor)(void *));
