@@ -5,7 +5,7 @@
  *
  * @return list_t*
  */
-list_t *list_construct()
+list_t *list_construct(void)
 {
     return calloc(1, sizeof(list_t));
 }

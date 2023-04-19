@@ -17,7 +17,7 @@ typedef struct list
     record_t *last;
 } list_t;
 
-list_t *list_construct();
+list_t *list_construct(void);
 void list_init(list_t *list);
 void list_clear(list_t *list, void (*destructor)(void *));
 list_t *lists_destruct(list_t *list, void (*destructor)(void *));

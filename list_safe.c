@@ -5,7 +5,7 @@
  *
  * @return list_safe_t*
  */
-list_safe_t *list_safe_construct()
+list_safe_t *list_safe_construct(void)
 {
     list_safe_t *list = calloc(1, sizeof(list_safe_t));
     list_safe_init(list);
