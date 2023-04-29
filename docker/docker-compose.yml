@@ -1,0 +1,10 @@
+version: '3'
+services:
+  lists-lib:
+    container_name: lists
+    build: .
+    volumes:
+      - ../:/lists
+    entrypoint: /bin/bash
+    stdin_open: true
+    tty: true
