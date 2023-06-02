@@ -75,7 +75,7 @@ re: clean make
 install: re
 	@mkdir -p $(INSTALL_PATH)include
 	@mkdir -p $(INSTALL_PATH)lib
-	@cp $(SRC_DIR)$(LIB_NAME).h $(INSTALL_PATH)include/
+	@cp $(SRC_DIR)*.h $(INSTALL_PATH)include/
 	@cp $(STATIC_LIB) $(INSTALL_PATH)lib/
 	@cp $(SHARED_LIB) $(INSTALL_PATH)lib/
 	@$(PRINTF) "$(OK_COLOR) Installed to $(OK_COLOR) $(INSTALL_PATH)$(NO_COLOR)\n"
