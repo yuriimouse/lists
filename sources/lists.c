@@ -143,5 +143,5 @@ void *list_remove(list_t *list)
  */
 void *list_get(list_t *list)
 {
-    return list ? list->head->value : NULL;
+    return (list && list->head) ? list->head->value : NULL;
 }
