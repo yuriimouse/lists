@@ -64,7 +64,7 @@ void list_safe_clear(list_safe_t *list, void (*destructor)(void *))
  * @param destructor
  * @return list_t*
  */
-list_safe_t *lists_safe_destruct(list_safe_t *list, void (*destructor)(void *))
+list_safe_t *list_safe_destruct(list_safe_t *list, void (*destructor)(void *))
 {
     if (list)
     {
