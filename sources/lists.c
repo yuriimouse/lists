@@ -119,7 +119,6 @@ void *list_remove(list_t *list)
 {
     if (list)
     {
-
         record_t *node = list->head;
         if (node)
         {
