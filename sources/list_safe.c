@@ -90,21 +90,23 @@ void list_safe_add(list_safe_t *list, void *value)
         pthread_mutex_lock(&list->mutex);
 
         record_safe_t *new_node = malloc(sizeof(record_safe_t));
-        new_node->next = NULL;
-        new_node->value = value;
-
-        if (list->last)
+        if (new_node)
         {
-            (list->last)->next = new_node;
-        }
-        else
-        {
-            list->head = new_node;
-        }
-        list->last = new_node;
+            new_node->next = NULL;
+            new_node->value = value;
 
-        pthread_mutex_unlock(&list->mutex);
+            if (list->last)
+            {
+                (list->last)->next = new_node;
+            }
+            else
+            {
+                list->head = new_node;
+            }
+            list->last = new_node;
+        }
         pthread_cond_signal(&list->cond);
+        pthread_mutex_unlock(&list->mutex);
     }
 }
 
@@ -130,8 +132,8 @@ void list_safe_push(list_safe_t *list, void *value)
             list->last = new_node;
         }
 
-        pthread_mutex_unlock(&list->mutex);
         pthread_cond_signal(&list->cond);
+        pthread_mutex_unlock(&list->mutex);
     }
 }
 
