@@ -87,15 +87,15 @@ void list_safe_add(list_safe_t *list, void *value)
 {
     if (list)
     {
+        pthread_mutex_lock(&list->mutex);
+
         record_safe_t *new_node = malloc(sizeof(record_safe_t));
         new_node->next = NULL;
         new_node->value = value;
 
-        pthread_mutex_lock(&list->mutex);
-
         if (list->last)
         {
-            list->last->next = new_node;
+            (list->last)->next = new_node;
         }
         else
         {
@@ -144,22 +144,25 @@ void list_safe_push(list_safe_t *list, void *value)
 void *list_safe_remove(list_safe_t *list)
 {
     void *value = NULL;
-    pthread_mutex_lock(&list->mutex);
 
-    while (list->head == NULL)
+    if (list)
     {
-        pthread_cond_wait(&list->cond, &list->mutex);
+        pthread_mutex_lock(&list->mutex);
+
+        while (list->head == NULL)
+        {
+            pthread_cond_wait(&list->cond, &list->mutex);
+        }
+
+        record_safe_t *node = list->head;
+        if (node)
+        {
+            value = node->value;
+            list->head = node->next;
+            free(node);
+        }
+
+        pthread_mutex_unlock(&list->mutex);
     }
-
-    record_safe_t *node = list->head;
-    if (node)
-    {
-        value = node->value;
-        list->head = node->next;
-        free(node);
-    }
-
-    pthread_mutex_unlock(&list->mutex);
-
     return value;
 }
