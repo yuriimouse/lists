@@ -162,6 +162,10 @@ void *list_safe_remove(list_safe_t *list)
             value = node->value;
             list->head = node->next;
             free(node);
+            if(!list->head)
+            {
+                list->last = NULL;
+            }
         }
 
         pthread_mutex_unlock(&list->mutex);
