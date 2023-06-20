@@ -8,7 +8,7 @@
 
 typedef struct record_safe
 {
-    record_safe_t *next;
+    struct record_safe *next;
     void *value;
 } record_safe_t;
 
