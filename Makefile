@@ -1,7 +1,7 @@
 include pretty.mk
 
 # Library name
-LIB_NAME = $(shell basename ${PWD})
+LIB_NAME = lists
 # Install path
 INSTALL_PATH = /usr/local/custom/
 #test path
