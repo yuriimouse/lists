@@ -1,9 +1,17 @@
-#ifndef LISTS_H
+fine#ifndef LISTS_H
 #define LISTS_H
 
 #define _GNU_SOURCE
 
 #include <stdlib.h>
+
+// versioning
+#define STR_INDIR(x) #x
+#define STR(x) STR_INDIR(x)
+#define VERSION_LIST_MAJOR 2
+#define VERSION_LIST_MINOR 1
+#define VERSION_LIST_PATCH 1
+#define VERSION_LIST STR(VERSION_LIST_MAJOR) "." STR(VERSION_LIST_MINOR) "." STR(VERSION_LIST_PATCH)
 
 typedef struct record
 {
