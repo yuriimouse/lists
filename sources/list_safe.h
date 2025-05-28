@@ -1,3 +1,5 @@
+// Co-authored-by: ChatGPT (gpt-4-o) <chatgpt@openai.com>
+
 #ifndef LIST_SAFE_H
 #define LIST_SAFE_H
 
