@@ -1,3 +1,4 @@
+# Co-authored-by: ChatGPT (gpt-4-o) <chatgpt@openai.com>
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -fPIC
 PREFIX ?= /usr/local
