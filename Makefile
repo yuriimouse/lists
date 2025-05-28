@@ -1,5 +1,3 @@
-# Makefile for lists library
-
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -fPIC
 PREFIX ?= /usr/local
@@ -7,6 +5,8 @@ PREFIX ?= /usr/local
 SRC = $(wildcard *.c)
 OBJ = $(SRC:.c=.o)
 TARGET = liblists.a
+
+HEADERS = lists.h list_safe.h
 
 .PHONY: all clean install uninstall
 
@@ -22,12 +22,12 @@ install: $(TARGET)
 	install -d $(PREFIX)/lib
 	install -d $(PREFIX)/include
 	install -m 644 $(TARGET) $(PREFIX)/lib/
-	install -m 644 lists.h $(PREFIX)/include/
+	install -m 644 $(HEADERS) $(PREFIX)/include/
 	@echo "Library installed to $(PREFIX)"
 
 uninstall:
 	rm -f $(PREFIX)/lib/$(TARGET)
-	rm -f $(PREFIX)/include/lists.h
+	cd $(PREFIX)/include && rm -f $(HEADERS)
 	@echo "Library uninstalled from $(PREFIX)"
 
 clean:
