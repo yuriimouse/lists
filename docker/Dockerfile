@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # 
-WORKDIR /app
+WORKDIR /lists
 
 # 
 COPY . .
@@ -21,5 +21,5 @@ COPY . .
 # 
 RUN make
 
-# Запуск тестов по умолчанию при запуске контейнера
+#
 CMD ["make", "test"]
