@@ -1,4 +1,4 @@
-fine#ifndef LISTS_H
+#ifndef LISTS_H
 #define LISTS_H
 
 #define _GNU_SOURCE
