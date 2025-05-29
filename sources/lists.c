@@ -1,4 +1,5 @@
 #include "lists.h"
+#include <errno.h>
 
 /**
  * Create list
@@ -98,6 +99,11 @@ void list_push(list_t *list, void *value)
     if (list)
     {
         record_t *new_node = malloc(sizeof(record_t));
+        CHECK_ALLOC(new_node)
+        {
+            errno = ENOMEM;
+            return;
+        }
         new_node->next = list->head;
         new_node->value = value;
 
