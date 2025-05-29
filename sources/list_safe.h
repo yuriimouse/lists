@@ -1,3 +1,4 @@
+// list_safe.h
 // Co-authored-by: ChatGPT (gpt-4-o) <chatgpt@openai.com>
 
 #ifndef LIST_SAFE_H
@@ -31,8 +32,14 @@ list_safe_t *list_safe_destruct(list_safe_t *list, void (*destructor)(void *));
 void list_safe_add(list_safe_t *list, void *value); // to end
 void list_safe_push(list_safe_t *list, void *value); // to head 
 void *list_safe_remove(list_safe_t *list);
-#define list_safe_pop(list) list_safe_remove(list);
+#define list_safe_pop(list) list_safe_remove(list)
 
 #define list_safe_foreach(list) for (record_safe_t *node = list->head; node; node = node->next)
-
+#define list_safe_foreach_begin(list) {\
+    list_safe_t *_stored_list_ = list; \
+    pthread_mutex_lock(&_stored_list_->mutex); \
+    for (record_safe_t *node = _stored_list_->head); \
+         node; \
+         node = node->next)
+#define list_safe_foreach_end pthread_mutex_unlock(&_stored_list_->mutex); }
 #endif // LIST_SAFE_H
