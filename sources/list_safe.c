@@ -14,25 +14,20 @@ list_safe_t *list_safe_construct(void)
         errno = ENOMEM;
         return NULL;
     }
-    list_safe_init(list);
+
+    // init
+    pthread_mutexattr_t attr;
+    pthread_mutexattr_init(&attr);
+    pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&list->mutex, &attr);
+    pthread_mutexattr_destroy(&attr);
+
+    pthread_cond_init(&list->cond, NULL);
+
+    list->head = NULL;
+    list->last = NULL;
 
     return list;
-}
-
-/**
- * Init empty list
- *
- * @param list
- */
-void list_safe_init(list_safe_t *list)
-{
-    if (list)
-    {
-        list->head = NULL;
-        list->last = NULL;
-        pthread_mutex_init(&list->mutex, NULL);
-        pthread_cond_init(&list->cond, NULL);
-    }
 }
 
 /**
