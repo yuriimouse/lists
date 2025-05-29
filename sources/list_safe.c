@@ -1,4 +1,5 @@
 #include "list_safe.h"
+#include <errno.h>
 
 /**
  * Create list
@@ -8,6 +9,11 @@
 list_safe_t *list_safe_construct(void)
 {
     list_safe_t *list = calloc(1, sizeof(list_safe_t));
+    ALLOC_CHECK(list)
+    {
+        errno = ENOMEM;
+        return NULL;
+    }
     list_safe_init(list);
 
     return list;
@@ -107,6 +113,10 @@ void list_safe_add(list_safe_t *list, void *value)
         }
         pthread_cond_signal(&list->cond);
         pthread_mutex_unlock(&list->mutex);
+        CHECK_ALLOC(new_node)
+        {
+            errno = ENOMEM;
+        }
     }
 }
 
@@ -121,6 +131,11 @@ void list_safe_push(list_safe_t *list, void *value)
     if (list)
     {
         record_safe_t *new_node = malloc(sizeof(record_safe_t));
+        CHECK_ALLOC(new_node)
+        {
+            errno = ENOMEM;
+            return;
+        }
 
         pthread_mutex_lock(&list->mutex);
         new_node->next = list->head;
