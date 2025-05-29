@@ -8,7 +8,7 @@ Designed for low-overhead projects that need simple list management.
 ## Features
 
 - Lightweight and minimal
-- Written in pure C (C89/C90 compatible)
+- Written in pure C (C89/C90/GNU compatible)
 - Easy to integrate and extend
 - Uses pointer-based design for flexibility
 
@@ -45,7 +45,7 @@ Include the header:
 ```
 Link with the static library:
 ```sh
-gcc yourfile.c -L/path/to/lib -llists
+gcc yourfile.c -L/usr/local/custom/lib -llists
 ```
 
 ---

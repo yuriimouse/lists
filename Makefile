@@ -1,14 +1,14 @@
 # Makefile
 # Co-authored-by: ChatGPT (gpt-4-o) <chatgpt@openai.com>
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 -fPIC -Isource
+CFLAGS = -Wall -Wextra -O2 -fPIC -Isources
 PREFIX ?= /usr/local
 
-SRC = $(wildcard source/*.c)
-OBJ = $(SRC:source/%.c=%.o)
+SRC = $(wildcard sources/*.c)
+OBJ = $(SRC:sources/%.c=%.o)
 TARGET = liblists.a
 
-HEADERS = source/lists.h source/list_safe.h source/lists_macros.h
+HEADERS = sources/lists.h
 
 TEST_SRC = $(wildcard tests/unit/*.c)
 TEST_BIN = $(TEST_SRC:tests/unit/%.c=tests/unit/%)
@@ -20,7 +20,7 @@ all: $(TARGET)
 $(TARGET): $(OBJ)
 	ar rcs $@ $^
 
-%.o: source/%.c
+%.o: sources/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 tests/unit/%: tests/unit/%.c $(TARGET)

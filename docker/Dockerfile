@@ -12,17 +12,4 @@ RUN apt-get update && apt-get install -y \
     git \
     valgrind \
     libcunit1 \
-    libcunit1-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# 
-WORKDIR /lists
-
-# 
-COPY . .
-
-# 
-RUN make
-
-#
-CMD ["make", "test"]
+    libcunit1-dev
