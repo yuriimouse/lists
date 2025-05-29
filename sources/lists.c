@@ -24,8 +24,9 @@ list_t *list_construct(void)
  * Destroy list
  *
  * @param list
+ * @return list_t*
  */
-void list_clear(list_t *list, void (*destructor)(void *))
+list_t *list_clear(list_t *list, void (*destructor)(void *))
 {
     if (list)
     {
@@ -38,6 +39,7 @@ void list_clear(list_t *list, void (*destructor)(void *))
             }
         }
     }
+    return NULL;
 }
 
 /**
@@ -62,9 +64,9 @@ list_t *list_destruct(list_t *list, void (*destructor)(void *))
  *
  * @param list
  * @param value
- * @return int
+ * @return void*
  */
-int list_add(list_t *list, void *value)
+void *list_add(list_t *list, void *value)
 {
     if (list)
     {
@@ -72,7 +74,7 @@ int list_add(list_t *list, void *value)
         IF_NULL(new_node)
         {
             errno = ENOMEM;
-            return 0;
+            return NULL;
         }
         new_node->next = NULL;
         new_node->value = value;
@@ -86,9 +88,10 @@ int list_add(list_t *list, void *value)
             list->head = new_node;
         }
         list->last = new_node;
-        return 1;
+        return value;
     }
-    return 0;
+    errno = EINVAL;
+    return NULL;
 }
 
 /**
@@ -96,9 +99,9 @@ int list_add(list_t *list, void *value)
  *
  * @param list
  * @param value
- * @return int
+ * @return void*
  */
-int list_push(list_t *list, void *value)
+void *list_push(list_t *list, void *value)
 {
     if (list)
     {
@@ -106,7 +109,7 @@ int list_push(list_t *list, void *value)
         IF_NULL(new_node)
         {
             errno = ENOMEM;
-            return 0;
+            return NULL;
         }
         new_node->next = list->head;
         new_node->value = value;
@@ -116,9 +119,10 @@ int list_push(list_t *list, void *value)
         {
             list->last = new_node;
         }
-        return 1;
+        return value;
     }
-    return 0;
+    errno = EINVAL;
+    return NULL;
 }
 
 /**
@@ -144,6 +148,7 @@ void *list_remove(list_t *list)
             return value;
         }
     }
+    errno = EINVAL;
     return NULL;
 }
 
@@ -151,8 +156,14 @@ void *list_remove(list_t *list)
  * Get head
  *
  * @param list
+ * @return void*
  */
 void *list_get(list_t *list)
 {
-    return (list && list->head) ? list->head->value : NULL;
+    IF_NULL(list)
+    {
+        errno = EINVAL;
+        return NULL;
+    }
+    return (list->head) ? list->head->value : NULL;
 }
