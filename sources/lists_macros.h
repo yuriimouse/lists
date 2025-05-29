@@ -12,4 +12,4 @@
 #define CHECK_ALLOC(ptr) \
     if (!(ptr))
 
-#enfif // LISTS_MACROS_H
+#endif // LISTS_MACROS_H
