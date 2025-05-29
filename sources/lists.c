@@ -1,3 +1,4 @@
+// lists.c
 #include "lists.h"
 #include <errno.h>
 
@@ -8,21 +9,15 @@
  */
 list_t *list_construct(void)
 {
-    return calloc(1, sizeof(list_t));
-}
-
-/**
- * Init existed list
- *
- * @param list
- */
-void list_init(list_t *list)
-{
-    if (list)
+    list_t *list = calloc(1, sizeof(list_t));
+    IF_NULL(list)
     {
-        list->head = NULL;
-        list->last = NULL;
+        errno = ENOMEM;
+        return NULL;
     }
+    list->head = NULL;
+    list->last = NULL;
+    return list;
 }
 
 /**
@@ -67,16 +62,17 @@ list_t *list_destruct(list_t *list, void (*destructor)(void *))
  *
  * @param list
  * @param value
+ * @return int
  */
-void list_add(list_t *list, void *value)
+int list_add(list_t *list, void *value)
 {
     if (list)
     {
         record_t *new_node = malloc(sizeof(record_t));
-        CHECK_ALLOC(new_node)
+        IF_NULL(new_node)
         {
             errno = ENOMEM;
-            return;
+            return 0;
         }
         new_node->next = NULL;
         new_node->value = value;
@@ -90,7 +86,9 @@ void list_add(list_t *list, void *value)
             list->head = new_node;
         }
         list->last = new_node;
+        return 1;
     }
+    return 0;
 }
 
 /**
@@ -98,16 +96,17 @@ void list_add(list_t *list, void *value)
  *
  * @param list
  * @param value
+ * @return int
  */
-void list_push(list_t *list, void *value)
+int list_push(list_t *list, void *value)
 {
     if (list)
     {
         record_t *new_node = malloc(sizeof(record_t));
-        CHECK_ALLOC(new_node)
+        IF_NULL(new_node)
         {
             errno = ENOMEM;
-            return;
+            return 0;
         }
         new_node->next = list->head;
         new_node->value = value;
@@ -117,7 +116,9 @@ void list_push(list_t *list, void *value)
         {
             list->last = new_node;
         }
+        return 1;
     }
+    return 0;
 }
 
 /**
