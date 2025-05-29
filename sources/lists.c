@@ -73,6 +73,11 @@ void list_add(list_t *list, void *value)
     if (list)
     {
         record_t *new_node = malloc(sizeof(record_t));
+        CHECK_ALLOC(new_node)
+        {
+            errno = ENOMEM;
+            return;
+        }
         new_node->next = NULL;
         new_node->value = value;
 
