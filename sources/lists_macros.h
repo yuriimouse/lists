@@ -10,7 +10,7 @@
 #define VERSION_LIST_PATCH 1
 #define VERSION_LIST STR(VERSION_LIST_MAJOR) "." STR(VERSION_LIST_MINOR) "." STR(VERSION_LIST_PATCH)
 
-#define CHECK_ALLOC(ptr) \
+#define IF_NULL(ptr) \
     if (!(ptr))
 
 #endif // LISTS_MACROS_H
