@@ -1,23 +1,39 @@
+# Makefile
 # Co-authored-by: ChatGPT (gpt-4-o) <chatgpt@openai.com>
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 -fPIC
+CFLAGS = -Wall -Wextra -O2 -fPIC -Isource
 PREFIX ?= /usr/local
 
-SRC = $(wildcard *.c)
-OBJ = $(SRC:.c=.o)
+SRC = $(wildcard source/*.c)
+OBJ = $(SRC:source/%.c=%.o)
 TARGET = liblists.a
 
-HEADERS = lists.h list_safe.h
+HEADERS = source/lists.h source/list_safe.h source/lists_macros.h
 
-.PHONY: all clean install uninstall
+TEST_SRC = $(wildcard tests/unit/*.c)
+TEST_BIN = $(TEST_SRC:tests/unit/%.c=tests/unit/%)
+
+.PHONY: all clean install uninstall test tests/unit
 
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
 	ar rcs $@ $^
 
-%.o: %.c
+%.o: source/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+tests/unit/%: tests/unit/%.c $(TARGET)
+	$(CC) $(CFLAGS) -o $@ $< -L. -llists -pthread
+
+tests/unit: $(TEST_BIN)
+
+test: tests/unit
+	@for t in $(TEST_BIN); do \
+		echo "Running $$t"; \
+		./$$t || exit 1; \
+	done
+	@echo "All tests passed."
 
 install: $(TARGET)
 	install -d $(PREFIX)/lib
@@ -28,8 +44,8 @@ install: $(TARGET)
 
 uninstall:
 	rm -f $(PREFIX)/lib/$(TARGET)
-	cd $(PREFIX)/include && rm -f $(HEADERS)
+	cd $(PREFIX)/include && rm -f $(notdir $(HEADERS))
 	@echo "Library uninstalled from $(PREFIX)"
 
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f $(OBJ) $(TARGET) $(TEST_BIN)
