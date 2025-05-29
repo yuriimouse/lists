@@ -25,7 +25,6 @@ typedef struct list_safe
 } list_safe_t;
 
 list_safe_t *list_safe_construct(void);
-void list_safe_init(list_safe_t *list);
 void list_safe_clear(list_safe_t *list, void (*destructor)(void *));
 list_safe_t *list_safe_destruct(list_safe_t *list, void (*destructor)(void *));
 
