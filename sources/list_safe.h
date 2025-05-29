@@ -26,20 +26,26 @@ typedef struct list_safe
 } list_safe_t;
 
 list_safe_t *list_safe_construct(void);
-void list_safe_clear(list_safe_t *list, void (*destructor)(void *));
+list_safe_t *list_safe_clear(list_safe_t *list, void (*destructor)(void *));
 list_safe_t *list_safe_destruct(list_safe_t *list, void (*destructor)(void *));
 
-void list_safe_add(list_safe_t *list, void *value); // to end
-void list_safe_push(list_safe_t *list, void *value); // to head 
+void *list_safe_add(list_safe_t *list, void *value); // to end
+void *list_safe_push(list_safe_t *list, void *value); // to head 
 void *list_safe_remove(list_safe_t *list);
+void *list_safe_get(list_safe_t *list);
+#define list_safe_peek(list) list_safe_get(list)
 #define list_safe_pop(list) list_safe_remove(list)
 
+#define list_safe_lock(list) pthread_mutex_lock(&(list)->mutex)
+#define list_safe_unlock(list) pthread_mutex_unlock(&(list)->mutex)
 #define list_safe_foreach(list) for (record_safe_t *node = list->head; node; node = node->next)
-#define list_safe_foreach_begin(list) {\
+#define list_safe_foreach_lock(list) \
+do {\
     list_safe_t *_stored_list_ = list; \
     pthread_mutex_lock(&_stored_list_->mutex); \
     for (record_safe_t *node = _stored_list_->head); \
          node; \
          node = node->next)
-#define list_safe_foreach_end pthread_mutex_unlock(&_stored_list_->mutex); }
+#define list_safe_foreach_unlock pthread_mutex_unlock(&_stored_list_->mutex); \
+    } until(0);
 #endif // LIST_SAFE_H
