@@ -1,7 +1,8 @@
 # Makefile
 # Co-authored-by: ChatGPT (gpt-4-o) <chatgpt@openai.com>
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 -fPIC -Isources
+# CFLAGS = -Wall -Wextra -O2 -fPIC -Isources
+CFLAGS = -Wall -Wextra -O0 -fPIC -g -Isources
 PREFIX ?= /usr/local
 
 SRC = $(wildcard sources/*.c)
@@ -10,10 +11,7 @@ TARGET = liblists.a
 
 HEADERS = sources/lists.h
 
-TEST_SRC = $(wildcard tests/unit/*.c)
-TEST_BIN = $(TEST_SRC:tests/unit/%.c=tests/unit/%)
-
-.PHONY: all clean install uninstall test tests/unit
+.PHONY: all clean install uninstall test
 
 all: $(TARGET)
 
@@ -23,17 +21,20 @@ $(TARGET): $(OBJ)
 %.o: sources/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-tests/unit/%: tests/unit/%.c $(TARGET)
-	$(CC) $(CFLAGS) -o $@ $< -L. -llists -pthread
+# tests/unit/%: tests/unit/%.c $(TARGET)
+# 	$(CC) $(CFLAGS) -o $@ $< -L. -llists -lcunit -pthread
 
-tests/unit: $(TEST_BIN)
+TEST_SRC = $(wildcard tests/unit/*.c)
+TEST_OBJ = $(TEST_SRC:.c=.o)
+TEST_BIN = tests/unit/test_runner
 
-test: tests/unit
-	@for t in $(TEST_BIN); do \
-		echo "Running $$t"; \
-		./$$t || exit 1; \
-	done
-	@echo "All tests passed."
+LDFLAGS += -L/lib/x86_64-linux-gnu
+
+test: $(TEST_BIN)
+	valgrind --leak-check=full --track-origins=yes $(TEST_BIN) 2>valgrind.out
+
+$(TEST_BIN): $(TEST_OBJ) $(TARGET)
+	$(CC) $(CFLAGS) -o $@ $^ -L. $(LDFLAGS) -lcunit -pthread -llists
 
 install: $(TARGET)
 	install -d $(PREFIX)/lib

@@ -3,3 +3,5 @@
 *.so
 .vscode
 deprecated/*
+tests/unit/test_runner
+valgrind.out

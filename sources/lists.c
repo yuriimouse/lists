@@ -4,7 +4,6 @@
 
 #include "lists.h"
 #include <errno.h>
-#include <malloc.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -246,54 +245,3 @@ void *list_get(list_t *list)
     }
     return (list->head) ? list->head->value : NULL;
 }
-
-#ifdef __GLIBC__
-/**
- * For GNU_SOURCE only.
- * Clones the top value of list.
- * 
- * @param list 
- * @return void* 
- */
-void *list_clone(list_t *list)
-{
-    IF_NULL(list)
-    {
-        errno = EINVAL;
-        return NULL;
-    }
-
-    void *duplicate = NULL;
-
-    list_lock(list);
-    void *value = (list->head) ? list->head->value : NULL;
-    if (value)
-    {
-        size_t size = malloc_usable_size(value);
-        if (size)
-        {
-            duplicate = malloc(size);
-            IF_NULL(duplicate)
-            {
-                errno = ENOMEM;
-            }
-            else
-            {
-                memcpy(duplicate, value, size);
-                errno = 0;
-            }
-        }
-        else
-        {
-            errno = ENODATA;
-        }
-    }
-    else
-    {
-        errno = EADDRNOTAVAIL;
-    }
-    list_unlock(list);
-
-    return duplicate;
-}
-#endif

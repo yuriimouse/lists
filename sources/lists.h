@@ -42,10 +42,6 @@ void *list_push(list_t *list, void *value); // to head
 void *list_get(list_t *list);
 #define list_peek(list) list_get(list)
 
-#ifdef __GLIBC__
-void *list_clone(list_t *list);
-#endif
-
 void list_wait(list_t *list);
 
 #define list_lock(list)                         \

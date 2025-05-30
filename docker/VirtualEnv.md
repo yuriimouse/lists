@@ -5,5 +5,6 @@
 cd docker
 docker compose up -d
 docker compose exec lists-lib /bin/bash
+
 cd /lists
 ```

@@ -1,6 +1,8 @@
+// tests/unit/main.c
+// Co-authored-by: ChatGPT (gpt-4-o) <chatgpt@openai.com>
 /**
- * @brief The main unit test module
- * @author Yurii Prudius
+ * The main unit test module
+ * @authors https://github.com/yuriimouse 
  **/
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
 
     if (CUE_SUCCESS != CU_initialize_registry())
     {
-        printf("\nInitialization of Test Registry failed.");
+        fprintf(stderr, "\nInitialization of Test Registry failed.");
     }
     else
     {

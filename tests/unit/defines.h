@@ -1,5 +1,14 @@
+// tests/unit/defines.h
 #ifndef UNIT_TEST_DEFS_H
 #define UNIT_TEST_DEFS_H
+
+#define FREE_AND_NULL(name) \
+    do                      \
+    {                       \
+        if (name)           \
+            free(name);     \
+        name = NULL;        \
+    } while (0)
 
 #define START_USING_TEST_DATA(path)                        \
     char *_str = NULL;                                     \
@@ -17,21 +26,15 @@
 
 #define USE_OF_THE_TEST_DATA(...) sscanf(_str, __VA_ARGS__)
 
-#define FINISH_USING_TEST_DATA             \
-        }                                  \
-        free(_str);                        \
-        _str = NULL;                       \
-        fclose(_fp);                       \
-    }                                      \
-    else                                   \
-    {                                      \
-        printf("'%s' not found...", _str); \
-        free(_str);                        \
-        _str = NULL;                       \
-        CU_ASSERT_TRUE_FATAL(0);           \
-    }                                      \
-    if(_str) _str = NULL;
-
-#define FREE_TEST_DATA(name) if(name) free(name);
+#define FINISH_USING_TEST_DATA                      \
+    }                                               \
+    fclose(_fp);                                    \
+    }                                               \
+    else                                            \
+    {                                               \
+        fprintf(stderr, "'%s' not found...", _str); \
+        CU_ASSERT_TRUE_FATAL(0);                    \
+    }                                               \
+    FREE_AND_NULL(_str)
 
 #endif // UNIT_TEST_DEFS_H
