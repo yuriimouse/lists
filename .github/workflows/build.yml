@@ -1,0 +1,33 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Build library
+        run: |
+          make clean
+          make all
+          test -f liblists.a
+
+      - name: Run tests with Valgrind
+        run: |
+          make install
+          make test
+          if grep -q "ERROR SUMMARY: 0 errors" valgrind.out; then
+            echo "Valgrind check passed."
+          else
+            echo "Valgrind found errors!"
+            cat valgrind.out
+            exit 1
+          fi
