@@ -22,7 +22,6 @@ jobs:
 
       - name: Run tests with Valgrind
         run: |
-          make install
           make test
           if grep -q "ERROR SUMMARY: 0 errors" valgrind.out; then
             echo "Valgrind check passed."
