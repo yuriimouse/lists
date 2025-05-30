@@ -13,7 +13,10 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcunit1-dev valgrind
       - name: Build library
         run: |
           make clean
@@ -22,7 +25,7 @@ jobs:
 
       - name: Run tests with Valgrind
         run: |
-          make test
+          make test 2>&1 | tee valgrind.out
           if grep -q "ERROR SUMMARY: 0 errors" valgrind.out; then
             echo "Valgrind check passed."
           else
